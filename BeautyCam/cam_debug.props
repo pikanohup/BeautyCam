@@ -16,7 +16,7 @@
       </IgnoreAllDefaultLibraries>
     </Link>
     <ClCompile>
-      <PreprocessorDefinitions>CURL_STATICLIB;BUILDING_LIBCURL;HTTP_ONLY;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>CURL_STATICLIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
   </ItemDefinitionGroup>

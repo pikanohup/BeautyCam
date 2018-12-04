@@ -140,7 +140,7 @@ public:
 /** \brief Abstract class for writers.
  * \deprecated Use StreamWriter. (And really, this is an implementation detail.)
  */
-class JSONCPP_DEPRECATED("Use StreamWriter instead") JSON_API Writer {
+class /* JSONCPP_DEPRECATED("Use StreamWriter instead") JSON_API */ Writer {
 public:
   virtual ~Writer();
 
@@ -219,7 +219,7 @@ private:
 #pragma warning(push)
 #pragma warning(disable:4996) // Deriving from deprecated class
 #endif
-class JSONCPP_DEPRECATED("Use StreamWriterBuilder instead") JSON_API StyledWriter : public Writer {
+class /* JSONCPP_DEPRECATED("Use StreamWriterBuilder instead") JSON_API */ StyledWriter : public Writer {
 public:
   StyledWriter();
   ~StyledWriter() JSONCPP_OVERRIDE {}
