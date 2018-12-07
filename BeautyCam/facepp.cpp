@@ -1,6 +1,5 @@
 #include <sstream>
 #include <curl/curl.h>
-#include <json/json.h>
 #include "facepp.h"
 
 using namespace std;
@@ -17,7 +16,7 @@ static size_t call_back(char *ptr, size_t size, size_t nmemb, void *content)
 	return size * nmemb;
 }
 
-void Facepp::doPost(const char *URL, map<const char *, const char *> params) {
+Json::Value Facepp::doPost(const char *URL, map<const char *, const char *> params) {
 
 	map<const char*, const char*>::iterator iter;
 
@@ -50,6 +49,8 @@ void Facepp::doPost(const char *URL, map<const char *, const char *> params) {
 
 	stringstream response;
 	CURL *curl = curl_easy_init();
+	curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 0);
+	curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, 0);
 	curl_easy_setopt(curl, CURLOPT_URL, URL);
 	curl_easy_setopt(curl, CURLOPT_HTTPPOST, post);
 	curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, &call_back);
@@ -64,24 +65,26 @@ void Facepp::doPost(const char *URL, map<const char *, const char *> params) {
 	// formate to json
 	Json::Value value;
 	Json::Reader reader;
-	Json::StyledWriter writer;
 	reader.parse(response.str(), value);
-	string result = writer.write(value);
 
-	cout << " \n\n -------------Response------------ \n\n "
-		 << result
-		 << " \n\n -------------Response------------ \n\n ";
+#ifdef _DEBUG
+	Json::StyledWriter writer;	
+	string result = writer.write(value);
+	cout << " \n\n -------------Response------------ \n\n " << result << endl;
+#endif
 
 	// release resources
 	curl_easy_cleanup(curl);
 	curl_formfree(post);
+
+	return value;
 };
 
-void Facepp::detect(const char *filePath) {
+Json::Value Facepp::detect(const char *filePath) {
 
 	if (NULL == filePath) {
 		fprintf(stderr, "\n\n-------Request failed-------\n %s \n\n", "file path can not be empty !");
-		return;
+		return Json::Value("");
 	}
 
 	const char *URL = "https://api-cn.faceplusplus.com/facepp/v3/detect";
@@ -90,5 +93,41 @@ void Facepp::detect(const char *filePath) {
 	params.insert(map<const char *, const char *>::value_type("api_key", key));
 	params.insert(map<const char *, const char *>::value_type("api_secret", secret));
 	params.insert(map<const char *, const char *>::value_type("image_file", filePath));
-	doPost(URL, params);
+	params.insert(map<const char *, const char *>::value_type("return_landmark", "1"));
+	// params.insert(map<const char *, const char *>::value_type("return_attributes", "beauty"));
+
+	return doPost(URL, params);
+}
+
+map<string, vector<cv::Point2i>> Facepp::extractLandmarks(Json::Value raw)
+{	
+	map<string, vector<cv::Point2i>> landmarks;
+	Json::Value raw_face = raw["faces"][0]["landmark"];
+	if (!raw_face.size()) {
+		return landmarks;
+	}
+	
+	Json::Value::Members keys = raw_face.getMemberNames();
+	for (auto iter = keys.begin(); iter != keys.end(); iter++) {
+		string key = *iter;
+
+		Json::Value::Members coords = raw_face[key].getMemberNames();
+		if (coords.size() != 2) continue;
+		int x = raw_face[key][coords[0]].asInt();
+		int y = raw_face[key][coords[1]].asInt();
+		cv::Point2i point(x, y);
+
+		int pos = key.find("\n");
+		if (pos != -1) {
+			key.erase(pos, 1);
+		}
+		pos = key.size() - 1;
+		if (isdigit(key[pos])) {
+			key.erase(pos, 1);
+		}
+		
+		landmarks[key].push_back(point);
+	}
+
+	return landmarks;
 }

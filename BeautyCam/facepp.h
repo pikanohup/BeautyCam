@@ -3,6 +3,8 @@
 
 #include <iostream>
 #include <map>
+#include <json/json.h>
+#include <opencv.hpp>
 
 using namespace std;
 
@@ -13,8 +15,9 @@ private:
 public:
 	Facepp(const char *key, const char *secret);
 
-	void doPost(const char *URL, map<const char *, const char *> params);
-	void detect(const char *filePath);
+	Json::Value doPost(const char *URL, map<const char *, const char *> params);
+	Json::Value detect(const char *filePath);
+	map<string, vector<cv::Point2i>> extractLandmarks(Json::Value raw);
 };
 
 #endif

@@ -126,11 +126,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="beautifier.cpp" />
     <ClCompile Include="facepp.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="warp.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="beautifier.h" />
     <ClInclude Include="facepp.h" />
+    <ClInclude Include="warp.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

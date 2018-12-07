@@ -21,9 +21,21 @@
     <ClCompile Include="facepp.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="beautifier.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="warp.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="facepp.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="warp.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="beautifier.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
