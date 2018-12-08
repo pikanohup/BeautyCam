@@ -3,7 +3,8 @@
 
 #include <iostream>
 #include <opencv.hpp>
-#include <map>
+#include <unordered_map>
+#include "warper.h"
 #include "facepp.h"
 
 using namespace cv;
@@ -12,14 +13,16 @@ using namespace std;
 class Beautifier {
 private:
 	Mat src;
-	map<string, vector<Point2i>> landmarks;
-public:
+	unordered_map<string, vector<Point2i>> landmarks;
 	Facepp faceppApi;
+	Warper warper;
 
 public:
 	Beautifier(const char *key, const char *secret);
-	void initialize();
+	void initialize(const char *filePath);
 	void clear();
+	double distance(Point2i a, Point2i b);
+	Mat slimFace();
 };
 
 #endif

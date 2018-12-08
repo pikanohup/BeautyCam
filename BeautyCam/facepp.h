@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <map>
+#include <unordered_map>
 #include <json/json.h>
 #include <opencv.hpp>
 
@@ -17,7 +18,7 @@ public:
 
 	Json::Value doPost(const char *URL, map<const char *, const char *> params);
 	Json::Value detect(const char *filePath);
-	map<string, vector<cv::Point2i>> extractLandmarks(Json::Value raw);
+	unordered_map<string, vector<cv::Point2i>> extractLandmarks(Json::Value raw);
 };
 
 #endif

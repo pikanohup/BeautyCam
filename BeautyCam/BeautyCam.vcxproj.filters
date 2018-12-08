@@ -24,7 +24,7 @@
     <ClCompile Include="beautifier.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="warp.cpp">
+    <ClCompile Include="warper.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
@@ -32,10 +32,13 @@
     <ClInclude Include="facepp.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="warp.h">
+    <ClInclude Include="beautifier.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="beautifier.h">
+    <ClInclude Include="warper.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="constants.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

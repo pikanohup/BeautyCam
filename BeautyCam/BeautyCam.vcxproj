@@ -129,12 +129,13 @@
     <ClCompile Include="beautifier.cpp" />
     <ClCompile Include="facepp.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="warp.cpp" />
+    <ClCompile Include="warper.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="beautifier.h" />
+    <ClInclude Include="constants.h" />
     <ClInclude Include="facepp.h" />
-    <ClInclude Include="warp.h" />
+    <ClInclude Include="warper.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

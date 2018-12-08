@@ -99,9 +99,9 @@ Json::Value Facepp::detect(const char *filePath) {
 	return doPost(URL, params);
 }
 
-map<string, vector<cv::Point2i>> Facepp::extractLandmarks(Json::Value raw)
+unordered_map<string, vector<cv::Point2i>> Facepp::extractLandmarks(Json::Value raw)
 {	
-	map<string, vector<cv::Point2i>> landmarks;
+	unordered_map<string, vector<cv::Point2i>> landmarks;
 	Json::Value raw_face = raw["faces"][0]["landmark"];
 	if (!raw_face.size()) {
 		return landmarks;
