@@ -12,7 +12,7 @@ using namespace std;
 
 class Beautifier {
 private:
-	Mat src;
+	Mat ori;
 	unordered_map<string, vector<Point2i>> landmarks;
 	Facepp faceppApi;
 	Warper warper;
@@ -22,7 +22,9 @@ public:
 	void initialize(const char *filePath);
 	void clear();
 	double distance(Point2i a, Point2i b);
-	Mat slimFace();
+	Mat slimFace(Mat src);
+	Mat enlageEyes(Mat src);
+	Mat autoBeautify();
 };
 
 #endif

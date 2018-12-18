@@ -93,7 +93,7 @@ Json::Value Facepp::detect(const char *filePath) {
 	params.insert(map<const char *, const char *>::value_type("api_key", key));
 	params.insert(map<const char *, const char *>::value_type("api_secret", secret));
 	params.insert(map<const char *, const char *>::value_type("image_file", filePath));
-	params.insert(map<const char *, const char *>::value_type("return_landmark", "1"));
+	params.insert(map<const char *, const char *>::value_type("return_landmark", "2"));
 	// params.insert(map<const char *, const char *>::value_type("return_attributes", "beauty"));
 
 	return doPost(URL, params);

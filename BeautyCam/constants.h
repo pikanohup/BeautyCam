@@ -7,6 +7,12 @@ constexpr auto SECRET = "UbpURpZq7jWRDDwk0K8gQPVZYuk6LT9t";
 constexpr auto CONTOUR_LEFT = "contour_left";
 constexpr auto CONTOUR_RIGHT = "contour_right";
 constexpr auto CONTOUR_CHIN = "contour_chin";
-constexpr auto NOSE_TIP = "nose_tip";
+constexpr auto NOSE_BRIDGE = "nose_bridge";
+constexpr auto LEFT_EYE_CENTER = "left_eye_center";
+constexpr auto LEFT_EYE_BOTTOM = "left_eye_bottom";
+constexpr auto LEFT_EYE_TOP = "left_eye_top";
+constexpr auto RIGHT_EYE_CENTER = "right_eye_center";
+constexpr auto RIGHT_EYE_BOTTOM = "right_eye_bottom";
+constexpr auto RIGHT_EYE_TOP = "right_eye_top";
 
 #endif

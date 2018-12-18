@@ -38,5 +38,29 @@ Mat Warper::localTranslationWarp(Mat src, int startX, int startY, int endX, int 
 			}
 		}
 	}
+
+	return dst;
+}
+
+Mat Warper::localScalingWarp(Mat src, int centerX, int centerY, double radius, double ratio)
+{
+	Mat dst = src;
+
+	for (int i = 0; i < dst.cols; i++) {
+		for (int j = 0; j < dst.rows; j++) {
+			if (fabs(i - centerX) > radius && fabs(j - centerY) > radius) continue;
+
+			double distance = sqrt((i - centerX) * (i - centerX) + (j - centerY) * (j - centerY));
+			if (distance < radius) {
+				double alpha = 1.0 - pow(distance / radius - 1.0, 2.0);
+
+				double oriX = centerX - alpha * (i - centerX);
+				double oriY = centerY - alpha * (j - centerY);
+
+				bilinearInsert(dst, oriX, oriY, i, j);
+			}
+		}
+	}
+
 	return dst;
 }

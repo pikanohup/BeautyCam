@@ -10,8 +10,10 @@ int main(int argc, const char * argv[]) {
 	Beautifier bf = Beautifier(KEY, SECRET);
 	bf.initialize(filePath);
 	
-	Mat dst = bf.slimFace();
-	imwrite("123.jpg", dst);
+	Mat dst = bf.autoBeautify();
+	//imwrite("eye.jpg", dst);
+	imshow("eye", dst);
+	waitKey(0);
 
 	return 0;
 }
