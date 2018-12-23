@@ -1,6 +1,7 @@
 #include <sstream>
 #include <curl/curl.h>
 #include "facepp.h"
+#include "constants.h"
 
 using namespace std;
 
@@ -102,7 +103,7 @@ Json::Value Facepp::detect(const char *filePath) {
 unordered_map<string, vector<cv::Point2i>> Facepp::extractLandmarks(Json::Value raw)
 {	
 	unordered_map<string, vector<cv::Point2i>> landmarks;
-	Json::Value raw_face = raw["faces"][0]["landmark"];
+	Json::Value raw_face = raw["faces"][0][LANDMARK];
 	if (!raw_face.size()) {
 		return landmarks;
 	}
@@ -130,4 +131,16 @@ unordered_map<string, vector<cv::Point2i>> Facepp::extractLandmarks(Json::Value 
 	}
 
 	return landmarks;
+}
+
+void Facepp::extractFaceRectangle(int &top, int &left, int &width, int &height, Json::Value raw)
+{
+	Json::Value raw_rectangle = raw["faces"][0][FACE_RECTANGLE];
+	if (!raw_rectangle.size()) {
+		return;
+	}
+	top = raw_rectangle[FACE_TOP].isNull() ? top : raw_rectangle[FACE_TOP].asInt();
+	left = raw_rectangle[FACE_LEFT].isNull() ? left : raw_rectangle[FACE_LEFT].asInt();
+	width = raw_rectangle[FACE_WIDTH].isNull() ? width : raw_rectangle[FACE_WIDTH].asInt();
+	height = raw_rectangle[FACE_HEIGHT].isNull() ? height: raw_rectangle[FACE_HEIGHT].asInt();
 }

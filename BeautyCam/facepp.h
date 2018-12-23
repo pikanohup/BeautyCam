@@ -19,6 +19,7 @@ public:
 	Json::Value doPost(const char *URL, map<const char *, const char *> params);
 	Json::Value detect(const char *filePath);
 	unordered_map<string, vector<cv::Point2i>> extractLandmarks(Json::Value raw);
+	void extractFaceRectangle(int &top, int &left, int &width, int &height, Json::Value raw);
 };
 
 #endif
