@@ -64,6 +64,9 @@ Mat Beautifier::skinMask(Mat src)
 		}
 	}
 
+	IplImage tmp = mask;
+	cvSmooth(&tmp, &tmp, CV_MEDIAN, 5, 5);
+
 	return mask;
 }
 
@@ -113,13 +116,14 @@ Mat Beautifier::enlageEyes(Mat src)
 
 Mat Beautifier::beautifySkin(Mat src)
 {
-	Mat dst = src.clone();
+	Mat tmp = src.clone();
 	Mat msk = skinMask(src);
+	Mat dst;
 
-	dst = filter.whiten(dst, 3);
-	dst = filter.smoothen(dst, 2, 2, 0.4);
+	tmp = filter.whiten(tmp, 5);
+	tmp = filter.smoothen(tmp, 2, 2, 0.4);
 
-	dst.copyTo(src, msk);
+	seamlessClone(tmp, src, msk, Point(src.cols / 2, src.rows / 2), dst, NORMAL_CLONE);
 
 	return dst;
 }
@@ -128,8 +132,8 @@ Mat Beautifier::autoBeautify()
 {
 	Mat dst = ori.clone();
 
-	//dst = slimFace(dst);
-	//dst = enlageEyes(dst);
+	dst = slimFace(dst);
+	dst = enlageEyes(dst);
 	dst = beautifySkin(dst);
 
 	return dst;
