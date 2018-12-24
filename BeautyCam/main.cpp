@@ -2,15 +2,16 @@
 #include "constants.h"
 #include "beautifier.h"
 #include <opencv.hpp>
-using namespace cv;
 
-const char *filePath = "0171_01.jpg";
+using namespace cv;
 
 int main(int argc, const char * argv[]) {
 	Beautifier bf = Beautifier(KEY, SECRET);
+	char filePath[25] = "test/0007_01.jpg";
 	bf.initialize(filePath);
 	
 	Mat dst = bf.autoBeautify();
+	//imwrite("test/0171_01_after.jpg", dst);
 
 #ifdef _DEBUG
 	Mat src = bf.getOri();

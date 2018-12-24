@@ -9,6 +9,7 @@ class Filter {
 public:
 	Mat whiten(Mat src, int beta);
 	Mat smoothen(Mat src, int alpha, int beta, double opacity);
+	Mat enhance(Mat src);
 };
 
 #endif

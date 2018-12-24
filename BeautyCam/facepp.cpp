@@ -24,7 +24,6 @@ Json::Value Facepp::doPost(const char *URL, map<const char *, const char *> para
 	struct curl_httppost *post = NULL;
 	struct curl_httppost *last = NULL;
 
-	// initialize
 	curl_global_init(CURL_GLOBAL_ALL);
 
 	for (iter = params.begin(); iter != params.end(); iter++) {
@@ -57,13 +56,11 @@ Json::Value Facepp::doPost(const char *URL, map<const char *, const char *> para
 	curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, &call_back);
 	curl_easy_setopt(curl, CURLOPT_WRITEDATA, &response);
 
-	// execute
 	CURLcode rescode = curl_easy_perform(curl);
 	if (CURLE_OK != rescode) {
 		fprintf(stderr, " \n\n -------Request failed------- \n %s \n\n ", curl_easy_strerror(rescode));
 	}
 
-	// formate to json
 	Json::Value value;
 	Json::Reader reader;
 	reader.parse(response.str(), value);
@@ -74,7 +71,6 @@ Json::Value Facepp::doPost(const char *URL, map<const char *, const char *> para
 	cout << " \n\n -------------Response------------ \n\n " << result << endl;
 #endif
 
-	// release resources
 	curl_easy_cleanup(curl);
 	curl_formfree(post);
 

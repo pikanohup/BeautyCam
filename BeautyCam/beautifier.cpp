@@ -11,12 +11,8 @@ bool comp(const Point2i a, const Point2i b) { return a.y < b.y; }
 void Beautifier::initialize(const char *filePath)
 {
 	ori = imread(filePath);
-	//Json::Value value = faceppApi.detect(filePath);
-	ifstream is;
-	is.open("face.json", ios::binary);
-	Json::Reader reader;
-	Json::Value value;
-	reader.parse(is, value);
+
+	Json::Value value = faceppApi.detect(filePath);
 
 	landmarks = faceppApi.extractLandmarks(value);
 	for (auto iter = landmarks.begin(); iter != landmarks.end(); iter++) {
@@ -64,9 +60,24 @@ Mat Beautifier::skinMask(Mat src)
 		}
 	}
 
-	IplImage tmp = mask;
-	cvSmooth(&tmp, &tmp, CV_MEDIAN, 5, 5);
+	Mat labels, stats, centroids;
+	int nccomps = cv::connectedComponentsWithStats(mask, labels, stats, centroids);
+	int max_area = 0, max_label;
+	for (int i = 1; i < nccomps; i++) {
+		int area = stats.at<int>(i, cv::CC_STAT_AREA);
+		if (area > max_area) {
+			max_area = area;
+			max_label = i;
+		}
+	}
+	for (int i = 0; i < src.cols; i++) {
+		for (int j = 0; j < src.rows; j++) {
+			if (labels.at<int>(j, i) != max_label) mask.at<uchar>(j, i) = 0;
+		}
+	}
 
+	GaussianBlur(mask, mask, Size(9, 9), 5, 5);
+	
 	return mask;
 }
 
@@ -103,12 +114,12 @@ Mat Beautifier::enlageEyes(Mat src)
 	if (landmarks[LEFT_EYE_CENTER].size() && landmarks[LEFT_EYE_BOTTOM].size() && landmarks[LEFT_EYE_TOP].size()) {
 		Point2i center = landmarks[LEFT_EYE_CENTER][0];
 		double radius = distance(landmarks[LEFT_EYE_BOTTOM][0], landmarks[LEFT_EYE_TOP][0]) * 1.5;
-		dst = warper.localScalingWarp(dst, center.x, center.y, radius, 1.2);
+		dst = warper.localScalingWarp(dst, center.x, center.y, radius, 1.1);
 	}
 	if (landmarks[RIGHT_EYE_CENTER].size() && landmarks[RIGHT_EYE_BOTTOM].size() && landmarks[RIGHT_EYE_TOP].size()) {
 		Point2i center = landmarks[RIGHT_EYE_CENTER][0];
 		double radius = distance(landmarks[RIGHT_EYE_BOTTOM][0], landmarks[RIGHT_EYE_TOP][0]) * 1.5;
-		dst = warper.localScalingWarp(dst, center.x, center.y, radius, 1.2);
+		dst = warper.localScalingWarp(dst, center.x, center.y, radius, 1.1);
 	}
 
 	return dst;
@@ -117,13 +128,31 @@ Mat Beautifier::enlageEyes(Mat src)
 Mat Beautifier::beautifySkin(Mat src)
 {
 	Mat tmp = src.clone();
-	Mat msk = skinMask(src);
-	Mat dst;
+	Mat mask = skinMask(src);
+	Mat dst(src.size(), src.type());
 
-	tmp = filter.whiten(tmp, 5);
-	tmp = filter.smoothen(tmp, 2, 2, 0.4);
+	tmp = filter.whiten(tmp, 7);
+	tmp = filter.smoothen(tmp, 2, 2, 0.5);
+	//tmp = filter.enhance(tmp);
 
-	seamlessClone(tmp, src, msk, Point(src.cols / 2, src.rows / 2), dst, NORMAL_CLONE);
+	int channels = src.channels();
+	for (int i = 0; i < src.cols; i++) {
+		for (int j = 0; j < src.rows; j++) {
+			int flag = mask.at<uchar>(j, i);
+			if (flag == 255) {
+				dst.at<Vec3b>(j, i) = tmp.at<Vec3b>(j, i);
+			}
+			else if (flag == 0) {
+				dst.at<Vec3b>(j, i) = src.at<Vec3b>(j, i);
+			}
+			else {
+				double w = (double)flag / 255.0;
+				for (int k = 0; k < channels; k++) {
+					dst.at<Vec3b>(j, i)[k] = w * tmp.at<Vec3b>(j, i)[k] + (1.0 - w) * src.at<Vec3b>(j, i)[k];
+				}
+			}
+		}
+	}
 
 	return dst;
 }

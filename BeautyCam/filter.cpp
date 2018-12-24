@@ -33,3 +33,11 @@ Mat Filter::smoothen(Mat src, int alpha, int beta, double opacity)
 	Mat dst = (1.0 - opacity) * src + opacity * layer4;
 	return dst;
 }
+
+Mat Filter::enhance(Mat src)
+{
+	Mat dst;
+	GaussianBlur(src, dst, Size(0, 0), 9);
+	addWeighted(src, 1.2, dst, -0.2, 0, dst);
+	return dst;
+}
