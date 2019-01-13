@@ -14,6 +14,7 @@ using namespace std;
 class Beautifier {
 private:
 	Mat ori;
+	Mat mask;
 
 	unordered_map<string, vector<Point2i>> landmarks;
 
@@ -28,13 +29,13 @@ public:
 	void clear();
 	Mat getOri();
 	double distance(Point2i a, Point2i b);
-	bool isSkin(int r, int g, int b);
-	Mat skinMask(Mat src);
 
-	Mat slimFace(Mat src);
-	Mat enlageEyes(Mat src);
-	Mat beautifySkin(Mat src);
-	Mat autoBeautify();
+	Mat slimFace(Mat src, double param);
+	Mat enlageEyes(Mat src, double param);
+	Mat whitenSkin(Mat src, double param, bool skined);
+	Mat smoothenSkin(Mat src, double param, bool skined);
+
+	Mat autoBeautify(Mat src);
 };
 
 #endif

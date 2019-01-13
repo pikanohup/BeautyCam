@@ -65,11 +65,10 @@ Json::Value Facepp::doPost(const char *URL, map<const char *, const char *> para
 	Json::Reader reader;
 	reader.parse(response.str(), value);
 
-#ifdef _DEBUG
 	Json::StyledWriter writer;	
 	string result = writer.write(value);
-	cout << " \n\n -------------Response------------ \n\n " << result << endl;
-#endif
+	cout << " \n\n -------------Response from face++------------ \n\n " << result << endl
+		<< " \n\n -------------Response end------------ \n\n";
 
 	curl_easy_cleanup(curl);
 	curl_formfree(post);
