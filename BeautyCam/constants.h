@@ -1,8 +1,8 @@
 #ifndef CONSTANTS_H
 #define CONSTANTS_H
 
-constexpr auto KEY = "x-pq6flagmculJoKDhhuCDSIkWARj-jG";;
-constexpr auto SECRET = "UbpURpZq7jWRDDwk0K8gQPVZYuk6LT9t";
+constexpr auto KEY = "key@face++";;
+constexpr auto SECRET = "secret@face++";
 
 constexpr auto LANDMARK = "landmark";
 constexpr auto FACE_RECTANGLE = "face_rectangle";

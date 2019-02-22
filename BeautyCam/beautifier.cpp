@@ -13,6 +13,7 @@ void Beautifier::initialize(const char *filePath)
 	ori = imread(filePath);
 	mask = filter.skinMask(ori);
 
+	cout << "Waiting for response from face++...\n";
 	Json::Value value = faceppApi.detect(filePath);
 
 	landmarks = faceppApi.extractLandmarks(value);
